@@ -188,7 +188,9 @@ RUN rabbitmq-server -detached
 ```
 
 Запускаем приложение
+
 CMD ["uvicorn", "main:app", "--reload"]
+
 3. docker-compose.yml:
 ```
 version: "3.9"
