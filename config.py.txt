@@ -1,0 +1,4 @@
+import os
+
+DATABASE_URL = os.environ.get("DATABASE_URL") or "postgresql://user:password@host:port/database"
+BROKER_URL = os.environ.get("BROKER_URL") or "amqp://guest:guest@localhost:5672//"
