@@ -5,31 +5,39 @@ uvicorn main:app --reload
 # 2. Проверка работы API:
 
 Загрузка документа:
+
 Отправьте POST-запрос на http://localhost:8000/upload_doc с файлом в формате изображения и датой документа.
 Получите ID загруженного документа в ответе.
 
 Удаление документа:
+
 Отправьте DELETE-запрос на http://localhost:8000/doc_delete/<id_документа>.
 Проверьте, что документ был удален с диска и из базы данных.
 
 Анализ документа:
+
 Отправьте POST-запрос на http://localhost:8000/doc_analyse/<id_документа>.
 Проверьте, что задача Celery была запущена для анализа документа.
 
 Получение текста:
+
 Отправьте GET-запрос на http://localhost:8000/get_text/<id_документа>.
 Получите текст из документа в ответе.
 
 # 3. Настройка RabbitMQ:
 
 Установите RabbitMQ: https://www.rabbitmq.com/
+
 Запустите RabbitMQ.
+
 Убедитесь, что в файле config.py установлена правильная URL для подключения к брокеру.
 
 # 4. Настройка Tesseract:
 
 Установите Tesseract: https://tesseract-ocr.github.io/
+
 Убедитесь, что в системе установлены языковые пакеты для Tesseract.
+
 Проверьте, что путь к Tesseract установлен в переменной окружения TESSDATA_PREFIX.
 
 
@@ -47,7 +55,7 @@ uvicorn main:app --reload
 Вот обновленный код с Swagger документацией, Dockerfile и docker-compose:
 
 1. main.py:
-
+```python
 import os
 import base64
 import datetime
@@ -140,34 +148,49 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
+```
 
 2. Dockerfile:
 
+```
 FROM python:3.9
+```
 
 Устанавливаем зависимости
+```
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+```
 
 Копируем файлы приложения
+```
 COPY . .
+```
 
 Устанавливаем tesseract
+```
 RUN apt-get update && apt-get install -y tesseract-ocr
+```
 
 Устанавливаем языковой пакет tesseract
+```
 RUN apt-get update && apt-get install -y tesseract-ocr-eng
+```
 
 Устанавливаем RabbitMQ
+```
 RUN apt-get update && apt-get install -y rabbitmq-server
+```
 
 Запускаем RabbitMQ
+```
 RUN rabbitmq-server -detached
+```
 
 Запускаем приложение
 CMD ["uvicorn", "main:app", "--reload"]
 3. docker-compose.yml:
-
+```
 version: "3.9"
 
 services:
@@ -186,10 +209,13 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+```
 
 4. Запуск проекта:
-
+```
 docker-compose up -d
+```
+
 Запуск веб-сервера:
 
 Откройте браузер и перейдите по адресу http://localhost:8000/docs или http://localhost:8000/redoc.
